@@ -1,0 +1,4 @@
+g++ (filename)              - on systems with mingw
+g++ -static (filename)      - on all systems
+
+
