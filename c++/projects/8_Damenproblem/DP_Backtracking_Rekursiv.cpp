@@ -118,6 +118,21 @@ bool check_field_state(vector<vector<int>> Field){
     }
     return true;
 }
+/*
+FÜR jede Zeile im Spielfeld
+	FÜR jede Spalte im Spielfeld
+		WENN keine Dame auf dem momentanen Feld steht DANN
+			Setze Dame auf das ausgewählte Feld
+			WENN Damen sich nicht schlagen UND es nicht N Damen sind DANN
+				Fange mit neuer Dame an
+			SONST WENN Damen sich nicht schlagen UND es N Damen sind DANN
+				Zeige das Spielfeld
+			ENDE WENN
+		ENDE WENN
+		Entferne Dame vom ausgewählten Feld
+	ENDE FÜR
+ENDE FÜR
+*/
 void NDamen(int N, vector<vector<int>> Field){
     //Durch Zeilen gehen
     for(int row = 0; row < Field.size(); row++){
@@ -138,7 +153,7 @@ void NDamen(int N, vector<vector<int>> Field){
                 }
                 //Wenn die Möglichkeiten zur der gerade gesetzen Dame fertig sind 
                 Field[row][col] = 0;
-                    //zurücksetzung der gesetzten Dame
+                //zurücksetzung der gesetzten Dame
             }
             
         }
@@ -156,6 +171,9 @@ Field =
 {0,0,0,0}
 }
 */
+
+
+
 int main(){
     int HowBigField;
     cout << "Wie groß soll das Spielfeld sein: ";
@@ -184,7 +202,6 @@ int main(){
     }else{
         cout << "Die Damen müssen weniger oder gleich viele sein wie die größe des Spielfelds.";
     }
-    
 
     return 0;
 }
