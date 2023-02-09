@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <chrono>
 using namespace std;
 
 vector<vector<vector<int>>> PerfectMatches;
@@ -118,18 +119,24 @@ bool check_field_state(vector<vector<int>> Field){
     return true;
 }
 void NDamen(int N, vector<vector<int>> Field){
-    for(int row = 0; row < Field.size(); row++){//Durch Zeilen
-        for(int col = 0; col < Field[row].size(); col++){//Druch Spalten
-            //Plazier Dame
+    //Durch Zeilen gehen
+    for(int row = 0; row < Field.size(); row++){
+        //Druch Spalten
+        for(int col = 0; col < Field[row].size(); col++){
+            //Wenn das Feld nicht belget ist
             if(Field[row][col] != 1){
+                //Das Feld belegen
                 Field[row][col] = 1;
-                if(check_field_state(Field) && how_many_placed(Field) != N){//Wenn die Dame gesetze werden kann und es aber noch nicht genug Damen sind
+                //Wenn die Dame gesetze werden kann und es aber noch nicht genug Damen sind
+                if(check_field_state(Field) && how_many_placed(Field) != N){
                     NDamen(N,Field);
-
-                }else if(check_field_state(Field) && how_many_placed(Field) == N){//Wenn sie gesetz werden kann und es N Damen auf dem Feld sind(Lösung)
+                
+                }//Wenn sie gesetz werden kann und es N Damen auf dem Feld sind(Lösung)
+                else if(check_field_state(Field) && how_many_placed(Field) == N){
                     print_array(Field);
 
                 }
+                //Wenn die Möglichkeiten zur der gerade gesetzen Dame fertig sind 
                 Field[row][col] = 0;
                     //zurücksetzung der gesetzten Dame
             }
@@ -159,12 +166,20 @@ int main(){
     int HowManyQueens;
     cout << "Wie viele Damen: ";
     cin >> HowManyQueens;
+
+    //Zeit messung
+    auto BeginTime =  chrono::high_resolution_clock::now();
+
     //Check ob die Eingabe berrechnet werden kann.
     if (HowManyQueens <= HowBigField){
-        
+        //In den Algorithmus gehen
         NDamen(HowManyQueens,Field);
-
-        cout << "\nEs gibt " + to_string(PerfectMatches.size()) + " mögliche Lösungen.";
+        //Ende des Algorithmus
+        auto EndTime = chrono::high_resolution_clock::now();
+        auto elapsed = chrono::duration_cast<chrono::nanoseconds>(EndTime - BeginTime);
+        //Endausgabe
+        cout << "\nEs gibt " + to_string(PerfectMatches.size()) + " mögliche Lösungen." << endl;
+        cout << "Um die Lösungen zufinden hat es: " + to_string(elapsed.count() * 1e-9) + " Sekunden.";
 
     }else{
         cout << "Die Damen müssen weniger oder gleich viele sein wie die größe des Spielfelds.";
