@@ -7,7 +7,6 @@ using namespace std;
 vector<vector<vector<int>>> PerfectMatches;
 
 
-
 int how_many_placed(vector<vector<int>> Field){
     int HowMany = 0;
     //Ein mal duch jede Zelle um zu schaun wie viel 1 es insegesamt gibt

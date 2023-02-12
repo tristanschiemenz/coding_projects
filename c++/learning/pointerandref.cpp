@@ -6,9 +6,6 @@
 
 
 
-int sumup(int *eins, int zwei){
-    *eins += zwei;
-}
 int main(){
 
     int zahl = 10;
@@ -34,7 +31,6 @@ int main(){
 
     int haupt = 10;
     int dazu = 15;
-    sumup(&haupt,dazu);
     std::cout << haupt << std::endl;
     
 
