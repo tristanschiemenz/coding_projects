@@ -82,7 +82,17 @@ class SortingAlgs{
             }
         }
     }
-    void insertion_sort(std::vector<int> &v){}
+    void insertion_sort(std::vector<int> &v,int delay){
+        int key, j;
+        for(int i = 1; i < v.size(); i++){
+            key = v[i];
+            j = i-1;
+            while (j >= 0 && v[j] > key){
+                //TODO: What and when to draw
+            }
+            
+        }
+    }
     private:
     void draw(std::vector<int> &v, unsigned int red,unsigned int blue){
         // SDL_SetRenderDrawColor(renderer,0,0,0,255);
