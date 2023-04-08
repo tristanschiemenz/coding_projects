@@ -342,7 +342,7 @@ int main(int argc, char *argv[]){
 
 
     //bubble
-    sorting.bubble_sort(v,0);
+    sorting.bubble_sort(v,1);
 
     std::shuffle(v.begin(), v.end(), rng);
     //Selction
@@ -358,18 +358,17 @@ int main(int argc, char *argv[]){
     
     std::shuffle(v.begin(), v.end(), rng);
     //merge
-    sorting.merge_sort(v,0,n-1,10);
+    sorting.merge_sort(v,0,n-1,1);
 
     std::shuffle(v.begin(), v.end(), rng);
     //quick
-    sorting.quick_sort(v,0,n-1,10);
+    sorting.quick_sort(v,0,n-1,1);
 
     std::shuffle(v.begin(), v.end(), rng);
     //couning
-    sorting.counting_sort(v,10);
+    sorting.counting_sort(v,1);
 
     sorting.print_array(v);
     
-    //Returning
     return 0;
 }
