@@ -140,6 +140,54 @@ class SortingAlgs{
             SDL_Delay(delay);
         }
     }
+    void quick_sort(std::vector<int> &arr, int start, int end, int delay){
+        // base case
+        if (start >= end)
+            return;
+    
+        // partitioning the array
+        int p = partition(arr, start, end,delay);
+        if(Sdrawing){
+            draw(arr,start,end);
+            SDL_Delay(delay);
+        }
+        // Sorting the left part
+        quick_sort(arr, start, p - 1,delay);
+        quick_sort(arr, p + 1, end,delay);
+    }
+    void shell_sort(std::vector<int> &arr, int size,int delay){
+        // Start with a big gap, then reduce the gap
+        for (int gap = size/2; gap > 0; gap /= 2)
+        {
+            // Do a gapped insertion sort for this gap size.
+            // The first gap elements a[0..gap-1] are already in gapped order
+            // keep adding one more element until the entire array is
+            // gap sorted 
+            for (int i = gap; i < size; i += 1)
+            {
+                // add a[i] to the elements that have been gap sorted
+                // save a[i] in temp and make a hole at position i
+                int temp = arr[i];
+    
+                // shift earlier gap-sorted elements up until the correct 
+                // location for a[i] is found
+                int j;            
+                for (j = i; j >= gap && arr[j - gap] > temp; j -= gap)
+                    arr[j] = arr[j - gap];
+                    if(Sdrawing){
+                        draw(arr,j,i);
+                        SDL_Delay(delay);
+                }
+                
+                //  put temp (the original a[i]) in its correct location
+                arr[j] = temp;
+                if(Sdrawing){
+                    draw(arr,gap,i);
+                    SDL_Delay(delay);
+                }
+            }
+        }
+    }
     private:
     void draw(std::vector<int> &v, unsigned int red,unsigned int blue){
         SDL_SetRenderDrawColor(renderer,0,0,0,255);
@@ -225,6 +273,48 @@ class SortingAlgs{
         delete[] leftArray;
         delete[] rightArray;
     }
+    int partition(std::vector<int> &arr, int start, int end,int delay){
+    
+        int pivot = arr[start];
+    
+        int count = 0;
+        for (int i = start + 1; i <= end; i++) {
+            if (arr[i] <= pivot){
+                count++;
+            }
+            if(Sdrawing){
+                draw(arr,pivot,i);
+                SDL_Delay(delay);
+            }
+        }
+    
+        // Giving pivot element its correct position
+        int pivotIndex = start + count;
+        std::swap(arr[pivotIndex], arr[start]);
+    
+        // Sorting left and right parts of the pivot element
+        int i = start, j = end;
+    
+        while (i < pivotIndex && j > pivotIndex) {
+            if(Sdrawing){
+                draw(arr,i,j);
+                SDL_Delay(delay);
+            }
+            while (arr[i] <= pivot) {
+                i++;
+            }
+
+            while (arr[j] > pivot) {
+                j--;
+            }
+    
+            if (i < pivotIndex && j > pivotIndex) {
+                std::swap(arr[i++], arr[j--]);
+            }
+        }
+    
+        return pivotIndex;
+    }
     bool Sdrawing;
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
@@ -249,8 +339,10 @@ int main(int argc, char *argv[]){
     bool drawing = true;
     SortingAlgs sorting(drawing,6);
     
+
+
     //bubble
-    sorting.bubble_sort(v,1);
+    sorting.bubble_sort(v,0);
 
     std::shuffle(v.begin(), v.end(), rng);
     //Selction
@@ -259,10 +351,18 @@ int main(int argc, char *argv[]){
     std::shuffle(v.begin(), v.end(), rng);
     //insert
     sorting.insertion_sort(v,1);
+
+    std::shuffle(v.begin(), v.end(), rng);
+    //shell
+    sorting.shell_sort(v,n,1);
     
     std::shuffle(v.begin(), v.end(), rng);
     //merge
     sorting.merge_sort(v,0,n-1,10);
+
+    std::shuffle(v.begin(), v.end(), rng);
+    //quick
+    sorting.quick_sort(v,0,n-1,10);
 
     std::shuffle(v.begin(), v.end(), rng);
     //couning
