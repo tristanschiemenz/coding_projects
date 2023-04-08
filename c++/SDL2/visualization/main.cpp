@@ -195,7 +195,7 @@ class SortingAlgs{
         }
         indexOfMergedArray++;
         if(Sdrawing){
-            draw(array,indexOfSubArrayOne,indexOfSubArrayTwo);
+            draw(array,indexOfMergedArray,indexOfSubArrayOne);
             SDL_Delay(delay);
         }
     }
@@ -206,6 +206,10 @@ class SortingAlgs{
             = leftArray[indexOfSubArrayOne];
         indexOfSubArrayOne++;
         indexOfMergedArray++;
+        if(Sdrawing){
+            draw(array,indexOfMergedArray,indexOfSubArrayOne);
+            SDL_Delay(delay);
+        }
     }
     // Copy the remaining elements of
     // right[], if there are any
@@ -241,25 +245,27 @@ int main(int argc, char *argv[]){
     std::shuffle(v.begin(), v.end(), rng);
     bool drawing = true;
     SortingAlgs sorting(drawing,6);
-    sorting.bubble_sort(v,1);
+    
+    // //bubble
+    // sorting.bubble_sort(v,1);
 
-    std::shuffle(v.begin(), v.end(), rng);
+    // std::shuffle(v.begin(), v.end(), rng);
+    // //Selction
+    // sorting.selection_sort(v,1);
 
-    sorting.selection_sort(v,1);
+    // std::shuffle(v.begin(), v.end(), rng);
+    // //insert
+    // sorting.insertion_sort(v,1);
+    
+    // std::shuffle(v.begin(), v.end(), rng);
+    // //merge
+    // sorting.merge_sort(v,0,n-1,0);
 
-    std::shuffle(v.begin(), v.end(), rng);
+    // std::shuffle(v.begin(), v.end(), rng);
+    // //couning
+    // sorting.counting_sort(v,10);
 
-    sorting.merge_sort(v,0,n-1,0);
-
-    std::shuffle(v.begin(), v.end(), rng);
-
-    sorting.insertion_sort(v,1);
-
-    std::shuffle(v.begin(), v.end(), rng);
-
-    sorting.counting_sort(v,10);
-
-    sorting.print_array(v);
+    // sorting.print_array(v);
     
     //Returning
     return 0;
