@@ -188,6 +188,29 @@ class SortingAlgs{
             }
         }
     }
+    void heap_sort(std::vector<int> &arr, int N,int delay){
+        // Build heap (rearrange array)
+        for (int i = N / 2 - 1; i >= 0; i--){
+            heapify(arr, N, i,delay);
+            if(Sdrawing){
+                draw(arr,i,N);
+                SDL_Delay(delay);
+            }
+        }
+        // One by one extract an element
+        // from heap
+        for (int i = N - 1; i > 0; i--) {
+    
+            // Move current root to end
+            std::swap(arr[0], arr[i]);
+            if(Sdrawing){
+                draw(arr,i,i);
+                SDL_Delay(delay);
+            }
+            // call max heapify on the reduced heap
+            heapify(arr, i, 0,delay);
+        }
+    }
     private:
     void draw(std::vector<int> &v, unsigned int red,unsigned int blue){
         SDL_SetRenderDrawColor(renderer,0,0,0,255);
@@ -315,6 +338,44 @@ class SortingAlgs{
     
         return pivotIndex;
     }
+    void heapify(std::vector<int> &arr, int N, int i,int delay){
+    
+        // Initialize largest as root
+        int largest = i;
+    
+        // left = 2*i + 1
+        int l = 2 * i + 1;
+    
+        // right = 2*i + 2
+        int r = 2 * i + 2;
+    
+        // If left child is larger than root
+        if (l < N && arr[l] > arr[largest]){
+            largest = l;
+        }
+        // If right child is larger than largest
+        // so far
+        if (r < N && arr[r] > arr[largest]){
+            largest = r;
+        }
+        if(Sdrawing){
+            draw(arr,i,largest);
+            SDL_Delay(delay);
+
+        }
+        
+        // If largest is not root
+        if (largest != i) {
+            std::swap(arr[i], arr[largest]);
+            if(Sdrawing){
+                draw(arr,i,largest);
+                SDL_Delay(delay);
+            }
+            // Recursively heapify the affected
+            // sub-tree
+            heapify(arr, N, largest,delay);
+        }
+    }
     bool Sdrawing;
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
@@ -335,38 +396,40 @@ int main(int argc, char *argv[]){
     std::mt19937 rng(std::time(nullptr));
 
     // Shuffle the vector
-    std::shuffle(v.begin(), v.end(), rng);
+
     bool drawing = true;
     SortingAlgs sorting(drawing,6);
     
+    std::shuffle(v.begin(), v.end(),rng);
+    sorting.heap_sort(v,n,10);
 
+    // std::shuffle(v.begin(), v.end(), rng);
+    //     //bubble
+    // sorting.bubble_sort(v,1);
 
-    //bubble
-    sorting.bubble_sort(v,1);
+    // std::shuffle(v.begin(), v.end(), rng);
+    // //Selction
+    // sorting.selection_sort(v,1);
 
-    std::shuffle(v.begin(), v.end(), rng);
-    //Selction
-    sorting.selection_sort(v,1);
+    // std::shuffle(v.begin(), v.end(), rng);
+    // //insert
+    // sorting.insertion_sort(v,1);
 
-    std::shuffle(v.begin(), v.end(), rng);
-    //insert
-    sorting.insertion_sort(v,1);
-
-    std::shuffle(v.begin(), v.end(), rng);
-    //shell
-    sorting.shell_sort(v,n,1);
+    // std::shuffle(v.begin(), v.end(), rng);
+    // //shell
+    // sorting.shell_sort(v,n,5);
     
-    std::shuffle(v.begin(), v.end(), rng);
-    //merge
-    sorting.merge_sort(v,0,n-1,1);
+    // std::shuffle(v.begin(), v.end(), rng);
+    // //merge
+    // sorting.merge_sort(v,0,n-1,10);
 
-    std::shuffle(v.begin(), v.end(), rng);
-    //quick
-    sorting.quick_sort(v,0,n-1,1);
+    // std::shuffle(v.begin(), v.end(), rng);
+    // //quick
+    // sorting.quick_sort(v,0,n-1,10);
 
-    std::shuffle(v.begin(), v.end(), rng);
-    //couning
-    sorting.counting_sort(v,1);
+    // std::shuffle(v.begin(), v.end(), rng);
+    // //couning
+    // sorting.counting_sort(v,10);
 
     sorting.print_array(v);
     
