@@ -5,13 +5,17 @@
 #include <algorithm>
 #include <ctime>
 
+//#include "main_menu.h"
+
 const int n = 100;
 
 
 class SortingAlgs{
     public:
-    SortingAlgs(bool &drawing, int scaling){
+    SortingAlgs(bool &drawing, int scaling, SDL_Renderer* inrenderer = nullptr,SDL_Window* inwindow = nullptr){
         Sdrawing = drawing;
+        renderer = inrenderer;
+        window = inwindow;
 
         if(Sdrawing){
             SDL_CreateWindowAndRenderer(n*scaling,n*scaling,0,&window,&renderer);
@@ -447,8 +451,8 @@ class SortingAlgs{
         return mx;
     }
     bool Sdrawing;
-    SDL_Window* window = nullptr;
-    SDL_Renderer* renderer = nullptr;
+    SDL_Window* window;
+    SDL_Renderer* renderer;
 
 
 };
@@ -470,23 +474,17 @@ int main(int argc, char *argv[]){
     bool drawing = true;
     SortingAlgs sorting(drawing,6);
     
-    std::shuffle(v.begin(), v.end(),rng);
-
-    
-
-    
-
     std::shuffle(v.begin(), v.end(), rng);
         //bubble
-    sorting.bubble_sort(v,0);
+    sorting.bubble_sort(v,2);
 
     std::shuffle(v.begin(), v.end(), rng);
     //Selction
-    sorting.selection_sort(v,1);
+    sorting.selection_sort(v,2);
 
     std::shuffle(v.begin(), v.end(), rng);
     //insert
-    sorting.insertion_sort(v,1);
+    sorting.insertion_sort(v,2);
 
     std::shuffle(v.begin(), v.end(), rng);
     //shell
