@@ -211,6 +211,21 @@ class SortingAlgs{
             heapify(arr, i, 0,delay);
         }
     }
+    void radix_sort(std::vector<int> &arr, int N,int delay){
+        // Find the maximum number to know number of digits
+        int m = getMax(arr, N,delay);
+
+        // Do counting sort for every digit. Note that instead
+        // of passing digit number, exp is passed. exp is 10^i
+        // where i is current digit number
+        for (int exp = 1; m / exp > 0; exp *= 10){
+            countSort(arr, N, exp,delay);
+            if(Sdrawing){
+                draw(arr,exp,exp);
+                SDL_Delay(delay);
+            }
+        }
+    }
     private:
     void draw(std::vector<int> &v, unsigned int red,unsigned int blue){
         SDL_SetRenderDrawColor(renderer,0,0,0,255);
@@ -376,6 +391,61 @@ class SortingAlgs{
             heapify(arr, N, largest,delay);
         }
     }
+    void countSort(std::vector<int> &arr, int N, int exp,int delay){
+        std::vector<int> output(N); // output array
+        int i;
+        std::vector<int> count(10);
+    
+        // Store count of occurrences in count[]
+        for (i = 0; i < N; i++){
+            count[(arr[i] / exp) % 10]++;
+            if(Sdrawing){
+                draw(count,i,i);
+                SDL_Delay(delay);
+            }
+        }
+        // Change count[i] so that count[i] now contains actual
+        //  position of this digit in output[]
+        for (i = 1; i < 10; i++){
+            count[i] += count[i - 1];
+            if(Sdrawing){
+                draw(count,exp,i);
+                SDL_Delay(delay);
+            }
+        }
+        // Build the output array
+        for (i = N - 1; i >= 0; i--) {
+            output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+            count[(arr[i] / exp) % 10]--;
+            if(Sdrawing){
+                draw(output,exp,i);
+                SDL_Delay(delay);
+            }
+        }
+    
+        // Copy the output array to arr[], so that arr[] now
+        // contains sorted numbers according to current digit
+        for (i = 0; i < N; i++){
+            arr[i] = output[i];
+            if(Sdrawing){
+                draw(arr,i,i);
+                SDL_Delay(delay);
+            }
+        }
+    }
+    int getMax(std::vector<int> &arr, int n,int delay){
+        int mx = arr[0];
+        for (int i = 1; i < n; i++){
+            if(Sdrawing){
+                draw(arr,i,i);
+                SDL_Delay(delay);
+            }
+            if (arr[i] > mx){
+                mx = arr[i];
+            }
+        }
+        return mx;
+    }
     bool Sdrawing;
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
@@ -401,7 +471,10 @@ int main(int argc, char *argv[]){
     SortingAlgs sorting(drawing,6);
     
     std::shuffle(v.begin(), v.end(),rng);
-    sorting.heap_sort(v,n,10);
+
+    sorting.radix_sort(v,n,1);
+
+    //sorting.heap_sort(v,n,10);
 
     // std::shuffle(v.begin(), v.end(), rng);
     //     //bubble
