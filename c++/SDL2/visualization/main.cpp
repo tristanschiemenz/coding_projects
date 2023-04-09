@@ -399,19 +399,19 @@ class SortingAlgs{
         // Store count of occurrences in count[]
         for (i = 0; i < N; i++){
             count[(arr[i] / exp) % 10]++;
-            if(Sdrawing){
-                draw(count,i,i);
-                SDL_Delay(delay);
-            }
+            // if(Sdrawing){
+            //     draw(count,i,i);
+            //     SDL_Delay(delay);
+            // }
         }
         // Change count[i] so that count[i] now contains actual
         //  position of this digit in output[]
         for (i = 1; i < 10; i++){
             count[i] += count[i - 1];
-            if(Sdrawing){
-                draw(count,exp,i);
-                SDL_Delay(delay);
-            }
+            // if(Sdrawing){
+            //     draw(count,exp,i);
+            //     SDL_Delay(delay);
+            // }
         }
         // Build the output array
         for (i = N - 1; i >= 0; i--) {
@@ -472,37 +472,45 @@ int main(int argc, char *argv[]){
     
     std::shuffle(v.begin(), v.end(),rng);
 
-    sorting.radix_sort(v,n,1);
-
-    //sorting.heap_sort(v,n,10);
-
-    // std::shuffle(v.begin(), v.end(), rng);
-    //     //bubble
-    // sorting.bubble_sort(v,1);
-
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //Selction
-    // sorting.selection_sort(v,1);
-
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //insert
-    // sorting.insertion_sort(v,1);
-
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //shell
-    // sorting.shell_sort(v,n,5);
     
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //merge
-    // sorting.merge_sort(v,0,n-1,10);
 
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //quick
-    // sorting.quick_sort(v,0,n-1,10);
+    
 
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //couning
-    // sorting.counting_sort(v,10);
+    std::shuffle(v.begin(), v.end(), rng);
+        //bubble
+    sorting.bubble_sort(v,0);
+
+    std::shuffle(v.begin(), v.end(), rng);
+    //Selction
+    sorting.selection_sort(v,1);
+
+    std::shuffle(v.begin(), v.end(), rng);
+    //insert
+    sorting.insertion_sort(v,1);
+
+    std::shuffle(v.begin(), v.end(), rng);
+    //shell
+    sorting.shell_sort(v,n,5);
+    
+    std::shuffle(v.begin(), v.end(), rng);
+    //heap
+    sorting.heap_sort(v,n,10);
+
+    std::shuffle(v.begin(), v.end(), rng);
+    //radix
+    sorting.radix_sort(v,n,10);
+    
+    std::shuffle(v.begin(), v.end(), rng);
+    //merge
+    sorting.merge_sort(v,0,n-1,10);
+
+    std::shuffle(v.begin(), v.end(), rng);
+    //quick
+    sorting.quick_sort(v,0,n-1,10);
+
+    std::shuffle(v.begin(), v.end(), rng);
+    //couning
+    sorting.counting_sort(v,10);
 
     sorting.print_array(v);
     
