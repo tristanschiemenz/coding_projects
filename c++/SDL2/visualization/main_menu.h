@@ -11,6 +11,7 @@ public:
     MainMenu(SDL_Renderer *renderer, TTF_Font *font);
     void render();
     void handleEvent(const SDL_Event &event);
+    void addButton(int x, int y, const std::string &text, std::function<void()> onClick);
 
 private:
     struct Button {
@@ -22,5 +23,5 @@ private:
     SDL_Renderer *renderer;
     TTF_Font *font;
     std::vector<Button> buttons;
-    void addButton(int x, int y, const std::string &text, std::function<void()> onClick);
+    
 };
