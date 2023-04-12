@@ -9,6 +9,7 @@
 class MainMenu {
 public:
     MainMenu(SDL_Renderer *renderer, TTF_Font *font);
+    ~MainMenu();
     void render();
     void handleEvent(const SDL_Event &event);
     void addButton(int x, int y, const std::string &text, std::function<void()> onClick);
@@ -18,8 +19,10 @@ private:
         SDL_Rect rect;
         std::string text;
         std::function<void()> onClick;
+        SDL_Texture *textTexture;
     };
-
+    SDL_Rect titleRect;
+    SDL_Texture *titleTexture;
     SDL_Renderer *renderer;
     TTF_Font *font;
     std::vector<Button> buttons;

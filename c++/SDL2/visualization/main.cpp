@@ -23,8 +23,8 @@ int main(int argc, char *argv[]){
     std::mt19937 rng(std::time(nullptr));
     std::shuffle(v.begin(), v.end(), rng);
     // Shuffle the vector
-    const int WINDOW_WIDTH = 1000;
-    const int WINDOW_HEIGHT = 1000;
+    const int WINDOW_WIDTH = 500;
+    const int WINDOW_HEIGHT = 500;
 
     //Menu
     if (SDL_Init(SDL_INIT_VIDEO) < 0 || TTF_Init() < 0) {
@@ -40,13 +40,68 @@ int main(int argc, char *argv[]){
         std::cerr << "Error creating window, renderer, or font: " << SDL_GetError() << std::endl;
         return 1;
     }
+
+
+    MainMenu mainMenu(renderer, font);
     bool drawing = true;
     SortingAlgs sorting(drawing,n,6,renderer,window);
-    MainMenu mainMenu(renderer, font);
 
-    mainMenu.addButton(500, 500, "Test", [&sorting, &v]() {
+    //Buttons
+    //Bubble Sort
+    mainMenu.addButton(25,200, "Bubble      ", [&sorting, &v, &rng]() {
     sorting.bubble_sort(v, 1); // Sort the vector in place
+    sorting.make_green(v);
+    std::shuffle(v.begin(), v.end(), rng);
     });
+    //Insertion Sort
+    mainMenu.addButton(175, 200, "Insert    ", [&sorting, &v, &rng]() {
+    sorting.insertion_sort(v,1); // Sort the vector in place
+    sorting.make_green(v);
+    std::shuffle(v.begin(), v.end(), rng);
+    });
+    //Selction Sort
+    mainMenu.addButton(325, 200, "Selection ", [&sorting, &v, &rng]() {
+    sorting.selection_sort(v,1); // Sort the vector in place
+    sorting.make_green(v);
+    std::shuffle(v.begin(), v.end(), rng);
+    });
+    //Shell Sort
+    mainMenu.addButton(25, 300, "Shell      ", [&sorting, &v, &rng]() {
+    sorting.shell_sort(v,n,5); // Sort the vector in place
+    sorting.make_green(v);
+    std::shuffle(v.begin(), v.end(), rng);
+    });
+    //Heap Sort
+    mainMenu.addButton(175, 300, "Heap      ", [&sorting, &v, &rng]() {
+    sorting.heap_sort(v,n,10); // Sort the vector in place
+    sorting.make_green(v);
+    std::shuffle(v.begin(), v.end(), rng);
+    });
+    //Radix Sort
+    mainMenu.addButton(325, 300, "Radix     ", [&sorting, &v, &rng]() {
+    sorting.radix_sort(v,n,10); // Sort the vector in place
+    sorting.make_green(v);
+    std::shuffle(v.begin(), v.end(), rng);
+    });
+    //Merge Sort
+    mainMenu.addButton(25, 400, "Merge      ", [&sorting, &v, &rng]() {
+    sorting.merge_sort(v,0,n,10); // Sort the vector in place
+    sorting.make_green(v);
+    std::shuffle(v.begin(), v.end(), rng);
+    });
+    //Quick Sort
+    mainMenu.addButton(175, 400, "Quick     ", [&sorting, &v, &rng]() {
+    sorting.quick_sort(v,0,n,10); // Sort the vector in place
+    sorting.make_green(v);
+    std::shuffle(v.begin(), v.end(), rng);
+    });
+    //Counting Sort
+    mainMenu.addButton(325, 400, "Counting  ", [&sorting, &v, &rng]() {
+    sorting.counting_sort(v,10); // Sort the vector in place
+    sorting.make_green(v);
+    std::shuffle(v.begin(), v.end(), rng);
+    });
+    
 
 
     bool running = true;
@@ -54,14 +109,25 @@ int main(int argc, char *argv[]){
 
     while (running) {
         while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) {
-                running = false;
-            } else {
-                mainMenu.handleEvent(e);
-            }
+            switch (e.type) {
+                case SDL_QUIT:
+                    running = false;
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                    mainMenu.handleEvent(e);
+                    break;
+                case SDL_WINDOWEVENT:
+                    if (e.window.event == SDL_WINDOWEVENT_CLOSE) {;
+                        running = false;
+                    }
+                    break;
+                default:
+                    break;
         }
+    }
 
-        mainMenu.render();
+    mainMenu.render();
+    SDL_Delay(10);
     }
 
     TTF_CloseFont(font);
@@ -69,46 +135,6 @@ int main(int argc, char *argv[]){
     SDL_DestroyWindow(window);
     TTF_Quit();
     SDL_Quit();
-
-
-
-    // std::shuffle(v.begin(), v.end(), rng);
-    //     //bubble
-    // sorting.bubble_sort(v,2);
-
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //Selction
-    // sorting.selection_sort(v,2);
-
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //insert
-    // sorting.insertion_sort(v,2);
-
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //shell
-    // sorting.shell_sort(v,n,5);
-    
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //heap
-    // sorting.heap_sort(v,n,10);
-
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //radix
-    // sorting.radix_sort(v,n,10);
-    
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //merge
-    // sorting.merge_sort(v,0,n-1,10);
-
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //quick
-    // sorting.quick_sort(v,0,n-1,10);
-
-    // std::shuffle(v.begin(), v.end(), rng);
-    // //couning
-    // sorting.counting_sort(v,10);
-
-    // sorting.print_array(v);
     
     return 0;
 }

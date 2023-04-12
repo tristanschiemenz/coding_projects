@@ -2,38 +2,54 @@
 #include "main_menu.h"
 #include <iostream>
 
-MainMenu::MainMenu(SDL_Renderer *renderer, TTF_Font *font) : renderer(renderer), font(font) {
+MainMenu::MainMenu(SDL_Renderer *renderer, TTF_Font *font) : renderer(renderer), font(font), titleTexture(nullptr) {
     //TODO
     //RENder and window vreater
 }
+MainMenu::~MainMenu() {
+    // Destroy textures in the destructor
+    if (titleTexture) {
+        SDL_DestroyTexture(titleTexture);
+    }
+    for (auto &button : buttons) {
+        if (button.textTexture) {
+            SDL_DestroyTexture(button.textTexture);
+        }
+    }
+};
+
 
 void MainMenu::render() {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 
-    SDL_Surface *titleSurface = TTF_RenderText_Solid(font, "Sorting Algorithm Visualization", { 255, 255, 255 });
-    SDL_Texture *titleTexture = SDL_CreateTextureFromSurface(renderer, titleSurface);
-    SDL_Rect titleRect = { 100, 100, titleSurface->w, titleSurface->h };
+    if (titleTexture == nullptr) {
+        SDL_Surface *titleSurface = TTF_RenderText_Solid(font, "Sorting Algorithm Visualization", { 255, 255, 255 });
+        titleTexture = SDL_CreateTextureFromSurface(renderer, titleSurface);
+        titleRect = { 100, 100, titleSurface->w, titleSurface->h };
+        SDL_FreeSurface(titleSurface);
+    }
     SDL_RenderCopy(renderer, titleTexture, nullptr, &titleRect);
-    SDL_FreeSurface(titleSurface);
-    SDL_DestroyTexture(titleTexture);
 
-    for (const auto &button : buttons) {
+    for (auto &button : buttons) {
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderFillRect(renderer, &button.rect);
 
-        SDL_Surface *textSurface = TTF_RenderText_Solid(font, button.text.c_str(), { 0, 0, 0 });
-        SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-        SDL_RenderCopy(renderer, textTexture, nullptr, &button.rect);
-        SDL_FreeSurface(textSurface);
-        SDL_DestroyTexture(textTexture);
+        if (button.textTexture == nullptr) {
+            SDL_Surface *textSurface = TTF_RenderText_Solid(font, button.text.c_str(), { 0, 0, 0 });
+            button.textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+            SDL_FreeSurface(textSurface);
+        }
+        SDL_RenderCopy(renderer, button.textTexture, nullptr, &button.rect);
     }
 
     SDL_RenderPresent(renderer);
 }
 
+
 void MainMenu::handleEvent(const SDL_Event &event) {
     if (event.type == SDL_MOUSEBUTTONDOWN) {
+        std::cout << "Mouse Down";
         int x, y;
         SDL_GetMouseState(&x, &y);
 

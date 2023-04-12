@@ -29,7 +29,7 @@ void SortingAlgs::bubble_sort(std::vector<int>& v, int delay){
             }
         }
     }
-    make_green(v);
+
 }
 void SortingAlgs::counting_sort(std::vector<int> &v,int delay){
     //finding the heighes value
@@ -73,7 +73,7 @@ void SortingAlgs::counting_sort(std::vector<int> &v,int delay){
             }
         }
     }
-    make_green(v);
+
 }
 void SortingAlgs::insertion_sort(std::vector<int> &v,int delay){
     int key, j;
@@ -95,7 +95,7 @@ void SortingAlgs::insertion_sort(std::vector<int> &v,int delay){
         }
         
     }
-    make_green(v);
+
 }
 void SortingAlgs::selection_sort(std::vector<int> &v, int delay){
     int minimumIndex;
@@ -112,7 +112,7 @@ void SortingAlgs::selection_sort(std::vector<int> &v, int delay){
         }
         std::swap(v[i],v[minimumIndex]);
     }
-    make_green(v);
+
 }
 void SortingAlgs::merge_sort(std::vector<int> &array, int const begin, int const end,int delay){  
     if (begin >= end)
@@ -134,7 +134,6 @@ void SortingAlgs::merge_sort(std::vector<int> &array, int const begin, int const
         draw(array,mid,mid);
         SDL_Delay(delay);
     }
-    make_green(array);
 }
 void SortingAlgs::quick_sort(std::vector<int> &arr, int start, int end, int delay){
     // base case
@@ -150,7 +149,6 @@ void SortingAlgs::quick_sort(std::vector<int> &arr, int start, int end, int dela
     // Sorting the left part
     quick_sort(arr, start, p - 1,delay);
     quick_sort(arr, p + 1, end,delay);
-    make_green(arr);
 }
 void SortingAlgs::shell_sort(std::vector<int> &arr, int size,int delay){
     // Start with a big gap, then reduce the gap
@@ -184,7 +182,6 @@ void SortingAlgs::shell_sort(std::vector<int> &arr, int size,int delay){
             }
         }
     }
-    make_green(arr);
 }
 void SortingAlgs::heap_sort(std::vector<int> &arr, int N,int delay){
     // Build heap (rearrange array)
@@ -208,7 +205,6 @@ void SortingAlgs::heap_sort(std::vector<int> &arr, int N,int delay){
         // call max heapify on the reduced heap
         heapify(arr, i, 0,delay);
     }
-    make_green(arr);
 }
 void SortingAlgs::radix_sort(std::vector<int> &arr, int N,int delay){
     // Find the maximum number to know number of digits
@@ -223,7 +219,6 @@ void SortingAlgs::radix_sort(std::vector<int> &arr, int N,int delay){
             SDL_Delay(delay);
         }
     }
-    make_green(arr);
 }
 void SortingAlgs::draw(std::vector<int> &v, unsigned int red,unsigned int blue){
     SDL_SetRenderDrawColor(renderer,0,0,0,255);
