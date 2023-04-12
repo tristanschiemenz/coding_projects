@@ -24,6 +24,7 @@ class SortingAlgs{
 
     private:
     void draw(std::vector<int> &v, unsigned int red,unsigned int blue);
+    void make_green(std::vector<int> &v);
     void merge(std::vector<int> &array, int const left, int const mid, int const right,int delay);
     int partition(std::vector<int> &arr, int start, int end,int delay);
     void heapify(std::vector<int> &arr, int N, int i,int delay);

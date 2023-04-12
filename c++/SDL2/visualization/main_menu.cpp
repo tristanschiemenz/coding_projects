@@ -2,17 +2,9 @@
 #include "main_menu.h"
 #include <iostream>
 
-void mode1() {
-    std::cout << "Mode 1 selected!" << std::endl;
-}
-
-void mode2() {
-    std::cout << "Mode 2 selected!" << std::endl;
-}
-
 MainMenu::MainMenu(SDL_Renderer *renderer, TTF_Font *font) : renderer(renderer), font(font) {
-    addButton(200, 200, "Mode 1", mode1);
-    addButton(200, 250, "Mode 2", mode2);
+    //TODO
+    //RENder and window vreater
 }
 
 void MainMenu::render() {
