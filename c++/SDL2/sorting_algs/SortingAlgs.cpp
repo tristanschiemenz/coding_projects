@@ -1,12 +1,12 @@
 #include "SortingAlgs.h"
 #include <iostream>
 
-SortingAlgs::SortingAlgs(bool &drawing, int n,int scaling, SDL_Renderer* inrenderer,SDL_Window* inwindow){
+SortingAlgs::SortingAlgs(bool &drawing, int n,float scaling, SDL_Renderer* inrenderer,SDL_Window* inwindow){
     Sdrawing = drawing;
     renderer = inrenderer;
     window = inwindow;
     if(Sdrawing){
-        SDL_CreateWindowAndRenderer(n*scaling,n*scaling,0,&window,&renderer);
+        SDL_CreateWindowAndRenderer(600,600,0,&window,&renderer);
         SDL_RenderSetScale(renderer,scaling,scaling);
     }
 }

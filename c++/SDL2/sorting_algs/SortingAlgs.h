@@ -9,7 +9,7 @@
 
 class SortingAlgs{
     public:
-    SortingAlgs(bool &drawing,int n, int scaling, SDL_Renderer* inrenderer = nullptr,SDL_Window* inwindow = nullptr);
+    SortingAlgs(bool &drawing,int n, float scaling, SDL_Renderer* inrenderer = nullptr,SDL_Window* inwindow = nullptr);
     void print_array(std::vector<int> &v);
 
     void bubble_sort(std::vector<int>& v, int delay);

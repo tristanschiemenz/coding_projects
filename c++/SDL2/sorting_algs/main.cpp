@@ -8,7 +8,7 @@
 #include "main_menu.h"
 #include "SortingAlgs.h"
 
-const int n = 100;
+const int n = 10;//10 bis 600 über 600 error wegen negativ scalings
 
 int main(int argc, char *argv[]){
 
@@ -44,7 +44,8 @@ int main(int argc, char *argv[]){
 
     MainMenu mainMenu(renderer, font);
     bool drawing = true;
-    SortingAlgs sorting(drawing,n,6,renderer,window);
+    float scaling = 600 / n;
+    SortingAlgs sorting(drawing,n,scaling,renderer,window);
 
     //Buttons
     //Bubble Sort
