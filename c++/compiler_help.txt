@@ -2,3 +2,7 @@ g++ (filename)              - on systems with mingw
 g++ -static (filename)      - on all systems
 
 
+g++ -o twister twister.cpp
+
+
+
