@@ -13,6 +13,7 @@ public:
     void render();
     void handleEvent(const SDL_Event &event);
     void addButton(int x, int y, const std::string &text, std::function<void()> onClick);
+    void addTextBox(int x, int y, std::string &text, );
 
 private:
     struct Button {
@@ -26,5 +27,6 @@ private:
     SDL_Renderer *renderer;
     TTF_Font *font;
     std::vector<Button> buttons;
-    
+    std::vector<Button> TextBoxs;
+    int selTextBox;
 };

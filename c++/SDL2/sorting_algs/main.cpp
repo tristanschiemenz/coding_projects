@@ -4,11 +4,23 @@
 #include <vector>
 #include <algorithm>
 #include <ctime>
+#include <string>
 
 #include "main_menu.h"
 #include "SortingAlgs.h"
 
-const int n = 10;//10 bis 600 über 600 error wegen negativ scalings
+
+const int n = 600;//10 bis 600 über 600 error wegen negativ scalings
+
+const int MaxStringSize = 11;
+
+
+std::string fill_string(std::string input){
+    while(input.size() < MaxStringSize){
+        input = input + " ";
+    }
+    return input;
+}
 
 int main(int argc, char *argv[]){
 
@@ -49,60 +61,64 @@ int main(int argc, char *argv[]){
 
     //Buttons
     //Bubble Sort
-    mainMenu.addButton(25,200, "Bubble      ", [&sorting, &v, &rng]() {
+    mainMenu.addButton(25,200, fill_string("Bubble"), [&sorting, &v, &rng]() {
     sorting.bubble_sort(v, 1); // Sort the vector in place
     sorting.make_green(v);
     std::shuffle(v.begin(), v.end(), rng);
     });
     //Insertion Sort
-    mainMenu.addButton(175, 200, "Insert    ", [&sorting, &v, &rng]() {
+    mainMenu.addButton(175, 200, fill_string("Insert"), [&sorting, &v, &rng]() {
     sorting.insertion_sort(v,1); // Sort the vector in place
     sorting.make_green(v);
     std::shuffle(v.begin(), v.end(), rng);
     });
     //Selction Sort
-    mainMenu.addButton(325, 200, "Selection ", [&sorting, &v, &rng]() {
+    mainMenu.addButton(325, 200, fill_string("Select"), [&sorting, &v, &rng]() {
     sorting.selection_sort(v,1); // Sort the vector in place
     sorting.make_green(v);
     std::shuffle(v.begin(), v.end(), rng);
     });
     //Shell Sort
-    mainMenu.addButton(25, 300, "Shell      ", [&sorting, &v, &rng]() {
+    mainMenu.addButton(25, 300, fill_string("Shell"), [&sorting, &v, &rng]() {
     sorting.shell_sort(v,n,5); // Sort the vector in place
     sorting.make_green(v);
     std::shuffle(v.begin(), v.end(), rng);
     });
     //Heap Sort
-    mainMenu.addButton(175, 300, "Heap      ", [&sorting, &v, &rng]() {
+    mainMenu.addButton(175, 300, fill_string("Heap"), [&sorting, &v, &rng]() {
     sorting.heap_sort(v,n,10); // Sort the vector in place
     sorting.make_green(v);
     std::shuffle(v.begin(), v.end(), rng);
     });
     //Radix Sort
-    mainMenu.addButton(325, 300, "Radix     ", [&sorting, &v, &rng]() {
+    mainMenu.addButton(325, 300, fill_string("Radix"), [&sorting, &v, &rng]() {
     sorting.radix_sort(v,n,10); // Sort the vector in place
     sorting.make_green(v);
     std::shuffle(v.begin(), v.end(), rng);
     });
     //Merge Sort
-    mainMenu.addButton(25, 400, "Merge      ", [&sorting, &v, &rng]() {
+    mainMenu.addButton(25, 400, fill_string("Merge"), [&sorting, &v, &rng]() {
     sorting.merge_sort(v,0,n,10); // Sort the vector in place
     sorting.make_green(v);
     std::shuffle(v.begin(), v.end(), rng);
     });
     //Quick Sort
-    mainMenu.addButton(175, 400, "Quick     ", [&sorting, &v, &rng]() {
+    mainMenu.addButton(175, 400, fill_string("Quick"), [&sorting, &v, &rng]() {
     sorting.quick_sort(v,0,n,10); // Sort the vector in place
     sorting.make_green(v);
     std::shuffle(v.begin(), v.end(), rng);
     });
     //Counting Sort
-    mainMenu.addButton(325, 400, "Counting  ", [&sorting, &v, &rng]() {
+    mainMenu.addButton(325, 400, fill_string("Counting"), [&sorting, &v, &rng]() {
     sorting.counting_sort(v,10); // Sort the vector in place
     sorting.make_green(v);
     std::shuffle(v.begin(), v.end(), rng);
     });
-    
+    //Idee for text input. Having a Button when clicked listener for user input starts 
+    //until the next event is happening. Then when i need the user Input just get the Text form the Button Box.
+    //Logically should work
+    //not working
+    mainMenu.addTextBox(0,0,"test");
 
 
     bool running = true;
@@ -139,3 +155,4 @@ int main(int argc, char *argv[]){
     
     return 0;
 }
+
