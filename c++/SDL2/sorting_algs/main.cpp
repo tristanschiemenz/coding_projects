@@ -14,30 +14,43 @@ const int n = 600;//10 bis 600 über 600 error wegen negativ scalings
 
 const int MaxStringSize = 11;
 
-
+std::mt19937 rng(std::time(nullptr));
 std::string fill_string(std::string input){
     while(input.size() < MaxStringSize){
         input = input + " ";
     }
     return input;
 }
+void initializeAndShuffleVector(std::vector<int>& vec, int size, std::mt19937& rng) {
+    vec.resize(size);
+
+    // Fill the vector with unique numbers
+    for (int i = 0; i < size; ++i) {
+        vec[i] = i + 1;
+    }
+
+    // Shuffle the vector
+    std::shuffle(vec.begin(), vec.end(), rng);
+}
+void adjustVectorSize(std::vector<int>& v, MainMenu& mainMenu, const int& HOWMUCH, std::mt19937& rng) {
+    int newSize = std::stoi(mainMenu.getTextFromTextBox(HOWMUCH));
+    if (newSize >= 1 && newSize <= 600) {
+        initializeAndShuffleVector(v, newSize, rng);
+    } // else: Consider providing an error message for out-of-bounds values.
+}
+
+
 
 int main(int argc, char *argv[]){
 
     std::vector<int> v(n);
 
     // Fill the vector with unique numbers
-    for (int i = 0; i < n; ++i) {
-        v[i] = i + 1;
-    }
-
-    // Seed the random number generator
-    std::mt19937 rng(std::time(nullptr));
-    std::shuffle(v.begin(), v.end(), rng);
+    initializeAndShuffleVector(v, n, rng);
     // Shuffle the vector
     const int WINDOW_WIDTH = 500;
     const int WINDOW_HEIGHT = 500;
-
+    
     //Menu
     if (SDL_Init(SDL_INIT_VIDEO) < 0 || TTF_Init() < 0) {
         std::cerr << "Error initializing SDL or SDL_ttf: " << SDL_GetError() << std::endl;
@@ -57,68 +70,109 @@ int main(int argc, char *argv[]){
     MainMenu mainMenu(renderer, font);
     bool drawing = true;
     float scaling = 600 / n;
-    SortingAlgs sorting(drawing,n,scaling,renderer,window);
+
+    int DELAY = mainMenu.addTextBox(0,1,fill_string("Delay"));
+    int HOWMUCH = mainMenu.addTextBox(0,30,fill_string("Size:1-600"));
 
     //Buttons
-    //Bubble Sort
-    mainMenu.addButton(25,200, fill_string("Bubble"), [&sorting, &v, &rng]() {
-    sorting.bubble_sort(v, 1); // Sort the vector in place
-    sorting.make_green(v);
-    std::shuffle(v.begin(), v.end(), rng);
+    // Bubble Sort
+    mainMenu.addButton(25,200, fill_string("Bubble"), [&]() {
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
+        float localScaling = 600.0f / v.size();
+        SortingAlgs localSorting(drawing, v.size(), localScaling, renderer, window);
+        int localdelay = std::stoi(mainMenu.getTextFromTextBox(DELAY));
+        localSorting.bubble_sort(v, localdelay);
+        localSorting.make_green(v);
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
     });
-    //Insertion Sort
-    mainMenu.addButton(175, 200, fill_string("Insert"), [&sorting, &v, &rng]() {
-    sorting.insertion_sort(v,1); // Sort the vector in place
-    sorting.make_green(v);
-    std::shuffle(v.begin(), v.end(), rng);
+
+    // Insertion Sort
+    mainMenu.addButton(175, 200, fill_string("Insert"), [&]() {
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
+        float localScaling = 600.0f / v.size();
+        SortingAlgs localSorting(drawing, v.size(), localScaling, renderer, window);
+        int localdelay = std::stoi(mainMenu.getTextFromTextBox(DELAY));
+        localSorting.insertion_sort(v,localdelay);
+        localSorting.make_green(v);
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
     });
-    //Selction Sort
-    mainMenu.addButton(325, 200, fill_string("Select"), [&sorting, &v, &rng]() {
-    sorting.selection_sort(v,1); // Sort the vector in place
-    sorting.make_green(v);
-    std::shuffle(v.begin(), v.end(), rng);
+
+    // Selection Sort
+    mainMenu.addButton(325, 200, fill_string("Select"), [&]() {
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
+        float localScaling = 600.0f / v.size();
+        SortingAlgs localSorting(drawing, v.size(), localScaling, renderer, window);
+        int localdelay = std::stoi(mainMenu.getTextFromTextBox(DELAY));
+        localSorting.selection_sort(v,localdelay);
+        localSorting.make_green(v);
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
     });
-    //Shell Sort
-    mainMenu.addButton(25, 300, fill_string("Shell"), [&sorting, &v, &rng]() {
-    sorting.shell_sort(v,n,5); // Sort the vector in place
-    sorting.make_green(v);
-    std::shuffle(v.begin(), v.end(), rng);
+
+    // Shell Sort
+    mainMenu.addButton(25, 300, fill_string("Shell"), [&]() {
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
+        float localScaling = 600.0f / v.size();
+        SortingAlgs localSorting(drawing, v.size(), localScaling, renderer, window);
+        int localdelay = std::stoi(mainMenu.getTextFromTextBox(DELAY));
+        localSorting.shell_sort(v, v.size(), localdelay);
+        localSorting.make_green(v);
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
     });
-    //Heap Sort
-    mainMenu.addButton(175, 300, fill_string("Heap"), [&sorting, &v, &rng]() {
-    sorting.heap_sort(v,n,10); // Sort the vector in place
-    sorting.make_green(v);
-    std::shuffle(v.begin(), v.end(), rng);
+
+    // Heap Sort
+    mainMenu.addButton(175, 300, fill_string("Heap"), [&]() {
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
+        float localScaling = 600.0f / v.size();
+        SortingAlgs localSorting(drawing, v.size(), localScaling, renderer, window);
+        int localdelay = std::stoi(mainMenu.getTextFromTextBox(DELAY));
+        localSorting.heap_sort(v, v.size(), localdelay);
+        localSorting.make_green(v);
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
     });
-    //Radix Sort
-    mainMenu.addButton(325, 300, fill_string("Radix"), [&sorting, &v, &rng]() {
-    sorting.radix_sort(v,n,10); // Sort the vector in place
-    sorting.make_green(v);
-    std::shuffle(v.begin(), v.end(), rng);
+
+    // Radix Sort
+    mainMenu.addButton(325, 300, fill_string("Radix"), [&]() {
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
+        float localScaling = 600.0f / v.size();
+        SortingAlgs localSorting(drawing, v.size(), localScaling, renderer, window);
+        int localdelay = std::stoi(mainMenu.getTextFromTextBox(DELAY));
+        localSorting.radix_sort(v, v.size(), localdelay);
+        localSorting.make_green(v);
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
     });
-    //Merge Sort
-    mainMenu.addButton(25, 400, fill_string("Merge"), [&sorting, &v, &rng]() {
-    sorting.merge_sort(v,0,n,10); // Sort the vector in place
-    sorting.make_green(v);
-    std::shuffle(v.begin(), v.end(), rng);
+
+    // Merge Sort
+    mainMenu.addButton(25, 400, fill_string("Merge"), [&]() {
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
+        float localScaling = 600.0f / v.size();
+        SortingAlgs localSorting(drawing, v.size(), localScaling, renderer, window);
+        int localdelay = std::stoi(mainMenu.getTextFromTextBox(DELAY));
+        localSorting.merge_sort(v, 0, v.size(), localdelay);
+        localSorting.make_green(v);
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
     });
-    //Quick Sort
-    mainMenu.addButton(175, 400, fill_string("Quick"), [&sorting, &v, &rng]() {
-    sorting.quick_sort(v,0,n,10); // Sort the vector in place
-    sorting.make_green(v);
-    std::shuffle(v.begin(), v.end(), rng);
+
+    // Quick Sort
+    mainMenu.addButton(175, 400, fill_string("Quick"), [&]() {
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
+        float localScaling = 600.0f / v.size();
+        SortingAlgs localSorting(drawing, v.size(), localScaling, renderer, window);
+        int localdelay = std::stoi(mainMenu.getTextFromTextBox(DELAY));
+        localSorting.quick_sort(v, 0, v.size(), localdelay);
+        localSorting.make_green(v);
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
     });
-    //Counting Sort
-    mainMenu.addButton(325, 400, fill_string("Counting"), [&sorting, &v, &rng]() {
-    sorting.counting_sort(v,10); // Sort the vector in place
-    sorting.make_green(v);
-    std::shuffle(v.begin(), v.end(), rng);
+
+    // Counting Sort
+    mainMenu.addButton(325, 400, fill_string("Counting"), [&]() {
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
+        float localScaling = 600.0f / v.size();
+        SortingAlgs localSorting(drawing, v.size(), localScaling, renderer, window);
+        int localdelay = std::stoi(mainMenu.getTextFromTextBox(DELAY));
+        localSorting.counting_sort(v, localdelay);
+        localSorting.make_green(v);
+        adjustVectorSize(v, mainMenu, HOWMUCH, rng);
     });
-    //Idee for text input. Having a Button when clicked listener for user input starts 
-    //until the next event is happening. Then when i need the user Input just get the Text form the Button Box.
-    //Logically should work
-    //not working
-    mainMenu.addTextBox(0,0,"test");
 
 
     bool running = true;
@@ -130,15 +184,13 @@ int main(int argc, char *argv[]){
                 case SDL_QUIT:
                     running = false;
                     break;
-                case SDL_MOUSEBUTTONDOWN:
-                    mainMenu.handleEvent(e);
-                    break;
                 case SDL_WINDOWEVENT:
                     if (e.window.event == SDL_WINDOWEVENT_CLOSE) {;
                         running = false;
                     }
                     break;
                 default:
+                    mainMenu.handleEvent(e);
                     break;
         }
     }

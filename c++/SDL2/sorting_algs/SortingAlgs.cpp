@@ -10,6 +10,13 @@ SortingAlgs::SortingAlgs(bool &drawing, int n,float scaling, SDL_Renderer* inren
         SDL_RenderSetScale(renderer,scaling,scaling);
     }
 }
+SortingAlgs::~SortingAlgs() {
+    // Destroy the window
+    if (window) {
+        SDL_DestroyWindow(window);
+        window = nullptr;
+    }
+}
 void SortingAlgs::print_array(std::vector<int> &v){
     for(int i = 0; i<v.size(); i++){
         std::cout << v[i] << " ";
