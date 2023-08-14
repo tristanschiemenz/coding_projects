@@ -1,5 +1,6 @@
 #include "SortingAlgs.h"
 #include <iostream>
+#include <vector>
 
 SortingAlgs::SortingAlgs(bool &drawing, int n,float scaling, SDL_Renderer* inrenderer,SDL_Window* inwindow){
     Sdrawing = drawing;
@@ -53,11 +54,7 @@ void SortingAlgs::counting_sort(std::vector<int> &v,int delay){
         }
     }
     
-    int counts[heighest+1];
-        // Initialize the count for each element in array to 0
-    for (int i = 0; i <= heighest+1; ++i) {
-        counts[i] = 0;
-    }
+    std::vector<int> counts(heighest + 1, 0);
     //Counting
     for(int i=0;i<v.size();i++){
         counts[v[i]]++;
