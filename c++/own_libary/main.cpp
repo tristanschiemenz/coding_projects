@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 template<typename T>
 struct doubelLinkedNode
@@ -40,6 +41,16 @@ public:
         head.next = NodeAfterDelete;
         return NodeData;
     }
+    T peak() {
+        return head.next->data;
+    }
+    bool isEmpty(){
+        SingelLinkedNode<T> * nextNode;
+        if(head.next == nullptr){
+            return true;
+        }
+        return false;
+    }
 
 private:
     SingelLinkedNode<T> head;
@@ -71,12 +82,47 @@ class Schlange {
         head.next = NodeAfterDelete;
         return NodeData;
     }
+    T peak() {
+        return head.next->data;
+    }
 
 
     private:
     SingelLinkedNode<T> head;
     SingelLinkedNode<T> * lastElem;
 };
+class TermTransformer(){
+    public:
+    TermTransformer(std::string input){
+        toTransform = input;
+    }
+    void changeTerm(std::string input){
+        toTransform = input;
+    }
+    std::string InfixToPostfix(){
+        //add In to Po with toTransform and store it into latestTransform
+        Schlange<int> numbers;
+        Stapel<std::string> operators;
+        std::string curNumber;
+        for(int i = 0; i < toTransform.size(); i++){
+            if(toTransform[i] >= 0 && toTransform[i] <= 9){
+                curNumber = curNumber + toTransform[i];
+            }
+            else if(toTransform[i] == "+" || toTransform[i] == "-" || toTransform[i] == "*" || toTransform[i] == "/"){
+                numbers.Enqueue(std::stoi(curNumber));
+                if()
+
+            }
+            
+        }
+    }
+    std::string PostfixToAssem(){
+        
+    }
+    private:
+    std::string latestTransform;
+    std::string toTransform;
+}
 
 
 int main(){
