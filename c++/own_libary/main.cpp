@@ -59,9 +59,8 @@ private:
 template<typename T>
 class Schlange {
     public:
-    Schlange(){
+    Schlange() : size(0) {
         head.next = nullptr;
-        head.data = T();
         lastElem = &head;
     }
     void Enqueue(T inputData){
@@ -70,26 +69,40 @@ class Schlange {
         newNode->next = nullptr;
         lastElem->next = newNode;
         lastElem = newNode;
+        size++;
     }
     T Dequeue(){
         if (!head.next) {
-            std::cerr << "Stack underflow! Trying to pop element from empty Stack" << std::endl;
+            std::cerr << "Stack underflow! Versuch ein Element aus einer leeren Schlange zu nehmen!" << std::endl;
             exit(1);
         }
         T NodeData = head.next->data;
         SingelLinkedNode<T> * NodeAfterDelete = head.next->next;
         delete head.next;
         head.next = NodeAfterDelete;
+        size--;
         return NodeData;
     }
     T peak() {
+        if (!head.next) {
+            std::cerr << "Schlange ist leer!" << std::endl;
+            exit(1);
+        }
         return head.next->data;
     }
-
+    void ForEach(std::function<void(T&)> action) {
+        for (SingelLinkedNode<T>* current = head.next; current != nullptr; current = current->next) {
+            action(current->data);
+        }
+    }
+    unsigned int Size() const {
+        return size;
+    }
 
     private:
     SingelLinkedNode<T> head;
     SingelLinkedNode<T> * lastElem;
+    unsigned int size;
 };
 class TermTransformer(){
     public:
