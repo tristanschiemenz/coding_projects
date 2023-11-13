@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <cctype>
+#include <functional>
 
 template<typename T>
 struct doubelLinkedNode
@@ -12,50 +14,56 @@ struct doubelLinkedNode
 template<typename T>
 struct SingelLinkedNode {
     T data;
-    SingelLinkedNode* next;
+    SingelLinkedNode* nextNode;
 };
 //oben Hinzufügen und oben Entfernen
-template<typename T>
+template <typename T>
 class Stapel {
 public:
-    Stapel() {
-        head.data = T();  
-        head.next = nullptr;
-    }
+	Stapel() {
+		firstPointer = nullptr;
+	}
+	void push(T Idata) {
+		size++;
+		SingelLinkedNode<T>* elem = new SingelLinkedNode<T>;
+		elem->data = Idata;
+		elem->nextNode = firstPointer;
+		firstPointer = elem;
+		return;
+	}
+	T pop() {
+		if (isEmpty()) {
+			std::cerr << "Stapel ist leer!!";
+			exit(1);
+		}
+		size--;
+		SingelLinkedNode<T>* toPop = firstPointer;
+		firstPointer = firstPointer->nextNode;
+		T data = toPop->data;
+		delete toPop;
+		return data;
 
-    void push(const T& inputData) {
-        SingelLinkedNode<T>* newNode = new SingelLinkedNode<T>;
-        newNode->data = inputData;
-        newNode->next = head.next;
-        head.next = newNode;
-    }
-
-    T pop() {
-        if (!head.next) {
-            std::cerr << "Stack underflow! Trying to pop element from empty Stack" << std::endl;
-            exit(1);
-        }
-        T NodeData = head.next->data;
-        SingelLinkedNode<T>* NodeAfterDelete = head.next->next;
-        delete head.next;
-        head.next = NodeAfterDelete;
-        return NodeData;
-    }
-    T peak() {
-        return head.next->data;
-    }
-    bool isEmpty(){
-        SingelLinkedNode<T> * nextNode;
-        if(head.next == nullptr){
-            return true;
-        }
-        return false;
-    }
-
+	}
+	T top() {
+	    if(isEmpty()){
+	        std::cerr << "Stapel ist leer!!";
+	        exit(1);
+	    }
+		return firstPointer->data;
+	}
+	bool isEmpty() {
+		if (firstPointer == nullptr) {
+			return true;
+		}
+		return false;
+	}
+	unsigned int count() const {
+		return size;
+	}
 private:
-    SingelLinkedNode<T> head;
+	SingelLinkedNode<T>* firstPointer;
+	unsigned int size;
 };
-
 template<typename T>
 class Schlange {
     public:
@@ -104,43 +112,59 @@ class Schlange {
     SingelLinkedNode<T> * lastElem;
     unsigned int size;
 };
-class TermTransformer(){
-    public:
-    TermTransformer(std::string input){
-        toTransform = input;
+int prioritaet(char Ioperaotr) {
+    switch (Ioperaotr) {
+        case '+': case '-': return 1;
+        case '*': case '/': return 2;
+        case '^': return 3;
+        case '(': return 0; // Priorität für '('
+        default: return -1; // Fallback für ungültige Operatoren
     }
-    void changeTerm(std::string input){
-        toTransform = input;
-    }
-    std::string InfixToPostfix(){
-        //add In to Po with toTransform and store it into latestTransform
-        Schlange<int> numbers;
-        Stapel<std::string> operators;
-        std::string curNumber;
-        for(int i = 0; i < toTransform.size(); i++){
-            if(toTransform[i] >= 0 && toTransform[i] <= 9){
-                curNumber = curNumber + toTransform[i];
-            }
-            else if(toTransform[i] == "+" || toTransform[i] == "-" || toTransform[i] == "*" || toTransform[i] == "/"){
-                numbers.Enqueue(std::stoi(curNumber));
-                if()
-
-            }
-            
-        }
-    }
-    std::string PostfixToAssem(){
-        
-    }
-    private:
-    std::string latestTransform;
-    std::string toTransform;
 }
 
+std::string InfixToPostfix(std::string InfixTerm) {
+    std::string PostfixTerm;
+    Stapel<char> operatorenStapel;
+
+    for (char ch : InfixTerm) {
+        if(ch == ' '){
+            //skip
+        } else if (std::isalnum(ch)) { // Überprüfung für Zahlen/Buchstaben
+            PostfixTerm.push_back(ch);
+        } else { // Rechenzeichen
+            if (!PostfixTerm.empty() && PostfixTerm.back() != ' ') {
+                PostfixTerm.push_back(' ');
+            }
+            if (ch == ')') {
+                while (!operatorenStapel.isEmpty() && operatorenStapel.top() != '(') {
+                    PostfixTerm.push_back(operatorenStapel.pop());
+                    PostfixTerm.push_back(' ');
+                }
+                operatorenStapel.pop(); // '(' entfernen
+            } else if(ch == '('){
+                operatorenStapel.push('(');
+            } else {
+                while (!operatorenStapel.isEmpty() && prioritaet(ch) <= prioritaet(operatorenStapel.top())) {
+                    PostfixTerm.push_back(operatorenStapel.pop());
+                    PostfixTerm.push_back(' ');
+                }
+                operatorenStapel.push(ch);
+            }
+        }
+    }
+
+    while (!operatorenStapel.isEmpty()) {
+        if (PostfixTerm.back() != ' ') {
+            PostfixTerm.push_back(' ');
+        }
+        PostfixTerm.push_back(operatorenStapel.pop());
+    }
+    return PostfixTerm;
+}
 
 int main(){
     
-    Stapel<int> stack;
+    std::cout << InfixToPostfix("45+ab*5-(4^2-5)");
 
 
 
