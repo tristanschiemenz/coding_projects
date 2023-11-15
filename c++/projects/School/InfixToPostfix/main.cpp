@@ -124,19 +124,19 @@ std::pair<std::string, std::string> PostfixToAssembler(std::string postFixTerm) 
         } else {
             std::string op2 = zahlStapel.pop();
             std::string op1 = zahlStapel.pop();
-            if (!isdigit(op2[0])) { // Check if op2 is a number
-                readableAssemblyCode += "mov eax, " + op2 + "\n";
-                inlineAssemblyCode += "\"movl %" + op2 + ", %%eax;\"\n";
+            if (!isdigit(op1[0])) { // Check if op2 is a number
+                readableAssemblyCode += "mov eax, " + op1 + "\n";
+                inlineAssemblyCode += "\"movl %%" + op1 + ", %%eax;\"\n";
             } else {
-                readableAssemblyCode += "mov eax, " + op2 + "\n";
-                inlineAssemblyCode += "\"movl $" + op2 + ", %%eax;\"\n";
+                readableAssemblyCode += "mov eax, " + op1 + "\n";
+                inlineAssemblyCode += "\"movl $" + op1 + ", %%eax;\"\n";
             }
-            if (!isdigit(op1[0])) { // Check if op1 is a number
-                readableAssemblyCode += "mov ebx, " + op1 + "\n";
-                inlineAssemblyCode += "\"movl %" + op1 + ", %%ebx;\"\n";
+            if (!isdigit(op2[0])) { // Check if op1 is a number
+                readableAssemblyCode += "mov ebx, " + op2 + "\n";
+                inlineAssemblyCode += "\"movl %%" + op2 + ", %%ebx;\"\n";
             } else {
-                readableAssemblyCode += "mov ebx, " + op1 + "\n";
-                inlineAssemblyCode += "\"movl $" + op1 + ", %%ebx;\"\n";
+                readableAssemblyCode += "mov ebx, " + op2 + "\n";
+                inlineAssemblyCode += "\"movl $" + op2 + ", %%ebx;\"\n";
             }
 
             
@@ -207,8 +207,8 @@ int runAssembly(std::string& AssemblyString){
 }
 int main()
 {
-    std::string assemcode = PostfixToAssembler(InfixToPostfix("8*10-100")).second;
-    std::cout << runAssembly(assemcode);
+    std::string assemcode = PostfixToAssembler(InfixToPostfix("9*10/9+(8-(2+2))")).first;
+    std::cout << assemcode;
     return 0;
 }
 
