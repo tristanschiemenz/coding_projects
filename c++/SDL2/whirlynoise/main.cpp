@@ -4,11 +4,11 @@
 #include <vector>
 #include <algorithm>
 
-const int WIDTH = 100;
-const int HEIGHT = 100;
+const int WIDTH = 500;
+const int HEIGHT = 500;
 const int WINDOWWIDTH = 1000;
 const int WINDOWHEIGHT = 1000;
-const int DIM = 100;
+const int DIM = 250;
 
 struct cor{
     int x;
@@ -70,14 +70,14 @@ std::vector<int> calcAllDistances(std::vector<cor> pointList, int x, int y, int 
     }
     return distList;
 }
-void drawColorOnDist(SDL_Renderer* renderer, std::vector<int> distList, int x, int y, int n) {
+void drawColorOnDist(SDL_Renderer* renderer, std::vector<int> distList, int x, int y, int z, int n) {
     double color = 0;
     for (int i = 0; i < n; ++i) {
         color += distList[i];
     }
     // Normalize or clamp the color value
-    color = color * 5;
-    SDL_SetRenderDrawColor(renderer, color/2, color, color/2, 255);
+    color = color * 2;
+    SDL_SetRenderDrawColor(renderer, color, color, color, 255);
     SDL_RenderDrawPoint(renderer, x, y);
 }
 
@@ -86,9 +86,9 @@ int main(int argc, char* argv[]){
 
     SDL_Window* window = SDL_CreateWindow("Noise", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WINDOWWIDTH, WINDOWHEIGHT, SDL_WINDOW_SHOWN);
     SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    SDL_RenderSetScale(renderer,10,10);
+    SDL_RenderSetScale(renderer,WINDOWWIDTH/WIDTH, WINDOWHEIGHT/HEIGHT);
     //generate random Points
-    std::vector<cor> randomPoints = createRandomPoints(50);
+    std::vector<cor> randomPoints = createRandomPoints(75);
     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
     //Draw Circle
     for(int i = 0; i < randomPoints.size(); ++i){
@@ -102,12 +102,13 @@ int main(int argc, char* argv[]){
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Clear with black
         SDL_RenderClear(renderer);
 
-        z = (z + 1) % DIM; // Increment and wrap-around z
+        // z = (z + 1) % DIM; // Increment and wrap-around z
         for (int x = 0; x < WIDTH; ++x) {
             for (int y = 0; y < HEIGHT; ++y) {
                 std::vector<int> distList = calcAllDistances(randomPoints, x, y, z);
                 std::sort(distList.begin(), distList.end());
-                drawColorOnDist(renderer, distList, x, y, 1);
+                drawColorOnDist(renderer, distList, x, y, z, 1);
+                // SDL_RenderPresent(renderer); // Update screen
             }
         }
 
