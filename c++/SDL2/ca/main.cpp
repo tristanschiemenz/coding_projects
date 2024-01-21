@@ -1,34 +1,55 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include <iostream>
+#include <bitset>
 
 int SCREEN_WIDTH = 1000;
 int SCREEN_HEIGHT = 1000;
-const int PIXELSIZE = 5;
-const bool RULE[8] ={0,1,1,0,1,0,1,1};
+const int PIXELSIZE = 10;
+unsigned int RULE = 17;
+const unsigned int COLORCOUNT = 15;
+const Uint32 COLORS[COLORCOUNT] = {
+    0x00000000, // Black
+    0xFFFF0000, // Red
+    0xFF00FF00, // Green
+    0xFF0000FF, // Blue
+    0xFFFFFF00, // Yellow
+    0xFFFF00FF, // Magenta
+    0xFF00FFFF, // Cyan
+    0xFF800000, // Maroon
+    0xFF808000, // Olive
+    0xFF008000, // Dark Green
+    0xFF800080, // Purple
+    0xFF008080, // Teal
+    0xFFFF8080, // Light Red
+    0xFF808080, // Gray
+    0xFFA52A2A  // Brown
+};
 
 
 
-void drawPixel(Uint32* pixels,int x, int y){
+void drawPixel(Uint32* pixels,int x, int y, int indexColor){
+    indexColor = indexColor+x;
     for (int dy = 0; dy < PIXELSIZE; ++dy) {
         for (int dx = 0; dx < PIXELSIZE; ++dx) {
             int pixelIndex = (y + dy) * SCREEN_WIDTH + (x + dx);
             if (pixelIndex < SCREEN_WIDTH * SCREEN_HEIGHT) {
-                pixels[pixelIndex] = 0x000000; // Set the pixel to white
+                pixels[pixelIndex] = COLORS[indexColor%COLORCOUNT]; // Set the pixel to white
             }
         }
     }
 }
-std::vector<bool> updateRow(const std::vector<bool>& states){
+std::vector<bool> updateRow(const std::vector<bool>& states) {
     int sizeofArray = states.size(); 
     std::vector<bool> updatedRow(sizeofArray);
-
+    std::bitset<8> ruleSet(RULE); // Using 8 bits for the rule
+    std::cout << ruleSet << std::endl;
     updatedRow[0] = states[0];
     updatedRow[sizeofArray - 1] = states[sizeofArray - 1];
 
-    for(int i = 1; i < sizeofArray - 1; i++){
+    for (int i = 1; i < sizeofArray - 1; i++) {
         int number = (states[i - 1] << 2) | (states[i] << 1) | states[i + 1];
-        updatedRow[i] = RULE[7 - number];
+        updatedRow[i] = ruleSet[number];
     }
 
     return updatedRow;
@@ -52,6 +73,7 @@ int main(int argc, char* argv[]) {
     start.resize(SCREEN_WIDTH/PIXELSIZE);
     std::fill(start.begin(),start.end(),0);
     start[start.size()/2] = 1;
+    int changer = 0;
 
     while (!quit) {
         SDL_GetWindowSize(window, &SCREEN_WIDTH, &SCREEN_HEIGHT);
@@ -78,12 +100,17 @@ int main(int argc, char* argv[]) {
 
         for(int i = 0; i < start.size(); i++){
             if(start[i]){
-                std::cout << i << std::endl;
-                drawPixel(pixels,i*PIXELSIZE,y*PIXELSIZE);
+                drawPixel(pixels,i*PIXELSIZE,y*PIXELSIZE,changer*RULE%COLORCOUNT);
             }
         }
     	start = updateRow(start);
         y++;
+        changer++;
+        if(changer % 100 == 0){
+            RULE++;
+            std::cout << RULE << std::endl;
+        }
+
          if (y * PIXELSIZE >= SCREEN_HEIGHT) {
             // Implement scroll logic: Shift everything up by PIXELSIZE
             memmove(pixels, pixels + SCREEN_WIDTH * PIXELSIZE, (SCREEN_HEIGHT - PIXELSIZE) * SCREEN_WIDTH * sizeof(Uint32));
@@ -97,7 +124,7 @@ int main(int argc, char* argv[]) {
         SDL_RenderClear(renderer);
         SDL_RenderCopy(renderer, texture, NULL, NULL);
         SDL_RenderPresent(renderer);
-        SDL_Delay(1);
+        SDL_Delay(10);
     }
 
     delete[] pixels;
